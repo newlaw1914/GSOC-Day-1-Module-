@@ -1,0 +1,1114 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GSOC-TRN-D1 · The role and the rules</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;500;700&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root{
+  --ink:#0A0C12;
+  --panel:#141822;
+  --panel-2:#1C2230;
+  --line:#2A3242;
+  --line-soft:#1F2633;
+  --bone:#E8EAEF;
+  --muted:#92989B;
+  --prism:#512FFF;
+  --prism-deep:#3F1DF8;
+  --crimson:#C8283C;
+  --amber:#F0B429;
+  --green:#4FBF8B;
+  --display:"Oswald","Arial Narrow",Haettenschweiler,Impact,sans-serif;
+  --body:"Spectral",Iowan Old Style,"Palatino Linotype",Georgia,serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ink);
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:7px 7px;
+  color:var(--bone);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 90px}
+
+/* ---------- masthead ---------- */
+header.mast{border-bottom:2px solid var(--line);padding:34px 0 20px;margin-bottom:6px}
+.filetag{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);display:flex;flex-wrap:wrap;gap:14px;align-items:center;
+}
+.filetag b{color:var(--prism);font-weight:500}
+.trio{width:22px;height:20px;flex:0 0 auto;stroke:var(--prism);fill:none}
+h1.title{
+  font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:clamp(34px,7.4vw,70px);line-height:.94;letter-spacing:-.01em;margin:14px 0 6px;
+}
+h1.title .a{color:var(--prism)}
+h1.title .tagbox{
+  display:inline-block;font-size:.34em;vertical-align:middle;
+  color:var(--ink);background:var(--bone);padding:2px 9px;margin:0 10px 0 0;transform:rotate(-4deg);
+}
+.dek{color:var(--muted);max-width:66ch;font-size:15px}
+.srcline{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);margin-top:12px}
+.srcline b{color:var(--bone);font-weight:500}
+
+/* ---------- nav ---------- */
+nav.tabs{
+  position:sticky;top:0;z-index:40;background:rgba(10,12,18,.94);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+  display:flex;gap:2px;overflow-x:auto;margin:0 -18px 26px;padding:0 18px;scrollbar-width:none;
+}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  flex:0 0 auto;background:none;border:0;border-bottom:3px solid transparent;
+  color:var(--muted);font-family:var(--display);text-transform:uppercase;
+  letter-spacing:.12em;font-size:13px;font-weight:500;padding:16px 14px;cursor:pointer;
+}
+nav.tabs button:hover{color:var(--bone)}
+nav.tabs button[aria-selected="true"]{color:var(--bone);border-bottom-color:var(--prism)}
+nav.tabs button .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:7px;opacity:0;transition:opacity .2s}
+nav.tabs button.done .dot{opacity:1}
+
+/* ---------- progress ---------- */
+.progress{display:flex;align-items:center;gap:12px;margin:0 0 28px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.bar{flex:1;height:6px;background:var(--panel-2);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--prism-deep),var(--prism));transition:width .45s ease}
+
+/* ---------- generic ---------- */
+section.view{display:none;animation:fade .3s ease}
+section.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.04em;font-size:clamp(24px,4vw,34px);font-weight:700;margin:0 0 4px}
+h3{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:17px;font-weight:500;margin:34px 0 12px;color:var(--bone)}
+.sub{color:var(--muted);font-size:14px;margin:0 0 24px;max-width:70ch}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--prism)}
+.eyebrow.alt{color:var(--amber)}
+.panel{background:var(--panel);border:1px solid var(--line);padding:20px}
+.hint{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.btn{font-family:var(--display);text-transform:uppercase;letter-spacing:.12em;font-size:13px;background:var(--bone);color:var(--ink);border:0;padding:11px 20px;cursor:pointer;font-weight:500}
+.btn:hover{background:var(--prism);color:#fff}
+.btn.ghost{background:none;color:var(--bone);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--panel-2);color:var(--bone)}
+.btn.danger:hover{background:var(--crimson);color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+input[type=text]{background:var(--panel-2);border:1px solid var(--line);color:var(--bone);padding:10px 12px;font-family:var(--mono);font-size:13px;min-width:0}
+input[type=text]:focus{outline:2px solid var(--prism);outline-offset:1px}
+:focus-visible{outline:2px solid var(--prism);outline-offset:2px}
+.sopref{font-family:var(--mono);font-size:.86em;color:var(--prism);white-space:nowrap}
+.ctrl{border-left:3px solid var(--prism);background:var(--panel-2);padding:14px 16px;margin:18px 0}
+.ctrl .lab{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--prism);display:block;margin-bottom:6px}
+.ctrl p{margin:0;font-size:15px}
+
+/* ---------- ledger ---------- */
+.ledger{border-top:1px solid var(--line)}
+.row{border-bottom:1px solid var(--line);padding:14px 0}
+.row .label{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cell{padding:12px 14px;background:var(--panel);border-left:3px solid var(--prism);font-size:15px}
+.cell.b{border-left-color:var(--muted)}
+.cell.b.neg{border-left-color:var(--crimson)}
+.cell .who{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:var(--prism);display:block;margin-bottom:5px}
+.cell.b .who{color:var(--muted)}
+.cell.b.neg .who{color:var(--crimson)}
+.reveal{cursor:pointer;position:relative}
+.reveal .masked{color:transparent;background:var(--panel-2);user-select:none}
+.reveal .masked::after{content:"tap to reveal";position:absolute;inset:auto 14px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.reveal.open{cursor:default}
+
+/* ---------- gallery ---------- */
+.side-switch{display:flex;gap:0;margin:0 0 22px;border:1px solid var(--line);width:max-content;max-width:100%;flex-wrap:wrap}
+.side-switch button{background:none;border:0;color:var(--muted);font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:12px;padding:12px 22px;cursor:pointer}
+.side-switch button.on{background:var(--prism);color:#fff}
+.side-switch button.on.alt{background:var(--amber);color:var(--ink)}
+.dossiers{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--prism);padding:16px;cursor:pointer;transition:transform .18s ease,border-color .18s}
+.card.alt{border-top-color:var(--amber)}
+.card:hover{transform:translateY(-3px);border-color:var(--muted)}
+.card .no{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.2em}
+.card .nm{font-family:var(--display);text-transform:uppercase;font-size:21px;font-weight:700;line-height:1.08;margin:6px 0 2px}
+.card .real{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+.card .teaser{font-size:14px;color:var(--muted);margin-top:10px}
+.card .more{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--prism);margin-top:12px;display:block}
+.card.alt .more{color:var(--amber)}
+.card.read{border-color:var(--green)}
+
+.scrim{position:fixed;inset:0;background:rgba(4,5,9,.84);display:none;z-index:80;overflow-y:auto;padding:24px 14px}
+.scrim.on{display:block}
+.dossier{max-width:660px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--prism);padding:24px;position:relative}
+.dossier.alt{border-top-color:var(--amber)}
+.dossier h4{font-family:var(--display);text-transform:uppercase;font-size:30px;margin:8px 0 2px;font-weight:700;line-height:1.02}
+.dossier .close{position:absolute;top:12px;right:12px;background:none;border:1px solid var(--line);color:var(--muted);width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
+.dossier .close:hover{color:var(--bone);border-color:var(--bone)}
+.field{border-top:1px solid var(--line);padding:12px 0}
+.field .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.field .v{font-size:15px}
+.flap{margin-top:14px;border:1px dashed var(--line);padding:14px;cursor:pointer;background:var(--panel-2)}
+.flap .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--prism)}
+.flap .body{display:none;margin-top:8px;font-size:15px}
+.flap.open{border-style:solid;cursor:default}
+.flap.open .body{display:block}
+
+/* ---------- sort ---------- */
+.dnd-pool{display:flex;flex-wrap:wrap;gap:9px;min-height:56px;padding:14px;background:var(--panel);border:1px dashed var(--line);margin-bottom:18px}
+.chip{background:var(--panel-2);border:1px solid var(--line);padding:9px 13px;cursor:grab;font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:13px;user-select:none;max-width:100%}
+.chip:active{cursor:grabbing}
+.chip.picked{outline:2px solid var(--prism);outline-offset:2px}
+.chip.right{border-color:var(--green);color:var(--green)}
+.chip.wrong{border-color:var(--crimson);color:var(--crimson)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.bin{background:var(--panel);border:2px dashed var(--line);padding:14px;min-height:150px}
+.bin.over{border-color:var(--prism);background:var(--panel-2)}
+.bin h5{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:13px;margin:0 0 4px;color:var(--prism)}
+.bin .bsub{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;text-transform:uppercase}
+.bin .drop{display:flex;flex-wrap:wrap;gap:9px}
+.feedback{margin-top:16px;padding:14px;border-left:3px solid var(--prism);background:var(--panel);font-size:15px;display:none}
+.feedback.on{display:block}
+.feedback.good{border-left-color:var(--green)}
+.feedback.bad{border-left-color:var(--crimson)}
+
+/* ---------- scenarios ---------- */
+.scen-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.scen-pick .card .nm{font-size:19px}
+.node{background:var(--panel);border:1px solid var(--line);padding:22px;margin-top:18px}
+.node .stage{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.node p.text{font-size:16px;margin:12px 0 20px}
+.choices{display:grid;gap:10px}
+.choice{text-align:left;background:var(--panel-2);border:1px solid var(--line);color:var(--bone);padding:14px 16px;cursor:pointer;font-family:var(--body);font-size:15px;line-height:1.45}
+.choice:hover{border-color:var(--prism)}
+.outcome{border-left:4px solid var(--amber);padding:18px;background:var(--panel-2);margin-top:16px}
+.outcome .verdict{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:15px;margin-bottom:8px;color:var(--amber)}
+.outcome.win{border-left-color:var(--green)}
+.outcome.win .verdict{color:var(--green)}
+.outcome.loss{border-left-color:var(--crimson)}
+.outcome.loss .verdict{color:var(--crimson)}
+.trail{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:14px;letter-spacing:.06em}
+
+/* ---------- quiz ---------- */
+.qhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+.qhead .n{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.qtext{font-size:19px;line-height:1.4;margin:0 0 18px}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;background:var(--panel);border:1px solid var(--line);color:var(--bone);padding:14px 16px;cursor:pointer;font-family:var(--body);font-size:15px;display:flex;gap:12px;align-items:flex-start}
+.opt:hover:not(:disabled){border-color:var(--prism)}
+.opt .ltr{font-family:var(--mono);font-size:12px;color:var(--muted);flex:0 0 auto;padding-top:2px}
+.opt.correct{border-color:var(--green);background:rgba(79,191,139,.09)}
+.opt.chosen-wrong{border-color:var(--crimson);background:rgba(200,40,60,.09)}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.correct:disabled,.opt.chosen-wrong:disabled{opacity:1}
+.rationale{margin-top:14px;padding:16px;background:var(--panel-2);border-left:3px solid var(--muted);display:none}
+.rationale.on{display:block}
+.rationale .tag{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;font-size:13px;margin-bottom:8px}
+.rationale.right{border-left-color:var(--green)}
+.rationale.right .tag{color:var(--green)}
+.rationale.wrong{border-left-color:var(--crimson)}
+.rationale.wrong .tag{color:var(--crimson)}
+.rationale .why{font-size:15px;margin-bottom:10px}
+.rationale .miss{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.rationale .miss b{color:var(--bone);font-weight:600}
+.stamp{display:inline-block;border:3px solid var(--green);color:var(--green);font-family:var(--display);text-transform:uppercase;letter-spacing:.2em;font-size:22px;padding:8px 18px;transform:rotate(-6deg);margin:10px 0}
+.stamp.fail{border-color:var(--crimson);color:var(--crimson)}
+.scorewrap{text-align:center;padding:30px 10px}
+.bigscore{font-family:var(--display);font-size:64px;line-height:1;font-weight:700}
+
+/* ---------- records ---------- */
+table.rec{width:100%;border-collapse:collapse;font-size:14px}
+table.rec th{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.rec td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+table.rec tr:hover td{background:var(--panel)}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.stat{background:var(--panel);border:1px solid var(--line);padding:14px}
+.stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--display);font-size:30px;line-height:1.1;margin-top:4px}
+.qbars{display:grid;gap:8px}
+.qbar{display:grid;grid-template-columns:1fr 68px;gap:12px;align-items:center;font-size:13px}
+.qbar .track{height:20px;background:var(--panel-2);position:relative}
+.qbar .track i{position:absolute;inset:0 auto 0 0}
+.qbar .track span{position:absolute;left:8px;top:0;line-height:20px;font-size:12px;color:var(--bone)}
+.qbar .pct{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+textarea.csv{width:100%;height:170px;background:var(--panel-2);border:1px solid var(--line);color:var(--bone);font-family:var(--mono);font-size:11px;padding:12px;display:none}
+textarea.csv.on{display:block}
+.note{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;letter-spacing:.04em}
+label.check{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer}
+footer.src{margin-top:60px;border-top:1px solid var(--line);padding-top:18px}
+
+.resume{display:none;border:1px solid var(--prism);border-left-width:4px;background:var(--panel);padding:14px 16px;margin:-8px 0 26px;align-items:center;gap:14px;flex-wrap:wrap}
+.resume.on{display:flex}
+.resume .t{flex:1;min-width:230px;font-size:15px}
+.resume .t b{font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:13px;display:block;color:var(--prism);margin-bottom:4px}
+#savedAt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);white-space:nowrap}
+.resumebar{border:1px dashed var(--prism);background:var(--panel-2);padding:14px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+@media (max-width:640px){
+  .cols{grid-template-columns:1fr}
+  .dossiers{grid-template-columns:1fr}
+  h1.title .tagbox{display:block;width:max-content;margin:0 0 8px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="mast">
+  <div class="filetag">
+    <svg class="trio" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 11 L89 79 L11 79 Z" stroke-width="16" stroke-linejoin="round"/></svg>
+    <span>Specialized GSOC</span>
+    <span>Module <b id="mcode"></b></span>
+    <span id="mtag"></span>
+    <span id="mest"></span>
+  </div>
+  <h1 class="title" id="mtitle"></h1>
+  <p class="dek" id="mdek"></p>
+  <p class="srcline" id="msrc"></p>
+</header>
+
+<nav class="tabs" role="tablist" id="tabs"></nav>
+
+<div class="progress">
+  <span>Progress</span>
+  <div class="bar"><i id="pbar"></i></div>
+  <span id="ptext">0%</span>
+  <span id="savedAt"></span>
+</div>
+
+<div class="resume" id="resume"></div>
+
+<section class="view" id="v-brief"></section>
+<section class="view" id="v-ledger"></section>
+<section class="view" id="v-gallery"></section>
+<section class="view" id="v-sort"></section>
+<section class="view" id="v-field"></section>
+<section class="view" id="v-quiz"></section>
+<section class="view" id="v-records"></section>
+
+<footer class="src">
+  <p class="note" id="mfoot"></p>
+</footer>
+</div>
+
+<div class="scrim" id="scrim"><div class="dossier" id="dossier"></div></div>
+<script>
+/* ============================ SPEC ============================ */
+const SPEC = {"id":"d1","code":"GSOC-TRN-D1","caseTag":"Day 1 of 10","est":"40 min","dayBox":"Day 1","title":["The role","and the rules"],"accentLine":1,"dek":"Before you touch a console you need the layer underneath it. Eighteen procedures sit on one governance framework, and five controls in that framework outrank everything else in the manual. This is where those land. Work through it in any order, it saves itself as you go, and you can shut the machine down mid-question and come back to the same spot.","sources":"SOP-GSOC-000 Part A · SOP-GSOC-002 · SOP-GSOC-006","certRef":"<span class=\"sopref\">SOP-GSOC-002</span>","qaRef":"<span class=\"sopref\">SOP-GSOC-015</span>","foot":"Module GSOC-TRN-D1, v0.1 draft, internal and operational. This is a training aid, not a controlled procedure. Where this module and a controlled SOP disagree, the SOP wins, every time. Program values that are not yet ratified appear as [CONFIRM] and are never scored.","brief":{"head":"What you're getting into","sub":"Six parts, any order, no time limit. Nothing locks. The parts that score you explain why an answer was right or wrong, not just whether it was. Day 1 is the only day that is mostly reading, because the governance layer has to land before anyone opens a feed.","control":"You are pre-certification. Until you hold a current certification under <span class=\"sopref\">SOP-GSOC-002</span> you may not sit a live console, supervised or otherwise. Nothing you do in this module touches a client record. This is where you are supposed to make your mistakes.","parts":[["Rule by rule","Twelve rules paired with the failure each one exists to prevent. Half of every pair is hidden until you tap it, so you have to commit to a guess first."],["The file on the rules","Ten cards. The five universal controls, and the five people whose decisions are not yours to make. Each card has a sealed section at the bottom."],["Whose call is it","Twelve actions, three files. Drag them to whoever owns the decision. Tap works too if you are on a phone."],["Field test","Three situations where the rule and the easy option point in different directions. Every ending explains the reasoning."],["Assessment","Ten questions with a written justification for the right answer and for whichever wrong one you picked."],["Records","Every attempt you make, per-question accuracy, and a CSV the Training Lead can pull into the competency record."]],"anchors":{"head":"The three anchors","items":["<b>Life safety outranks everything.</b> Scope, cost, client preference, chain of command. You escalate first and seek approval afterward, per Part A, Section A4.","<b>Verify facts, not assumptions.</b> Verification comes before dispatch and before escalation, unless the Program Annex carries a written exception approved by the Program Director.","<b>An unrecorded action did not happen.</b> Not as a figure of speech. As the audit position, on the record, when somebody asks a year later."]},"cta":"Start with the rules"},"ledger":{"tab":"Rule by rule","head":"Rule by rule","sub":"Each row pairs a rule with the specific failure it was written to prevent. One side is hidden and which side alternates, so you cannot coast. Rows you have already opened stay open next time you are here.","colA":"What it says","colB":"What it prevents","negB":true,"cta":"On to the cards","rows":[{"label":"Scope","a":"A capability has to be scoped and paid for in an executed SOW before the GSOC delivers it. This is absolute and is not subject to operator or supervisor discretion.","b":"An operator quietly monitoring something nobody sold, nobody staffed and nobody priced. When it fails, the client is owed a service they never bought and the GSOC has no defense."},{"label":"Part A governs","a":"Governance is stated once in Part A and not repeated. Where an individual SOP is silent on a governance question, Part A governs.","b":"Eighteen procedures each inventing their own answer to the same question, and a floor applying whichever version it happens to remember."},{"label":"CONTROL","a":"A hard gate. The procedure cannot lawfully proceed past a control that has not been satisfied. Controls are the auditable checkpoints of the manual.","b":"Controls read as strong advice, which is exactly how an uncertified operator ends up on a live console during a staffing crunch."},{"label":"[CONFIRM]","a":"A program-level item that is genuinely not decided yet, marked in place rather than guessed at, with every instance collected in the register at Appendix A.","b":"An operator inventing a number on shift to fill a gap, and the invented number getting quoted back six months later as though it were policy."},{"label":"Unverified action","a":"No action is taken on an unverified alert, except where the Program Annex carries an explicit written exception approved by the Program Director.","b":"An officer and two patrol cars sent to an empty lot because a camera caught a raccoon, the client billed for it, and the next real alert at that site taken less seriously."},{"label":"Site acceptance","a":"No site is monitored until it has recorded a full pass under <span class=\"sopref\">SOP-GSOC-004</span>, jointly confirmed from the production console.","b":"A site sitting on the roster that nobody can actually see, discovered during an incident instead of during a test. An item deferred at go-live is an item found at 3 a.m."},{"label":"Certification","a":"No operator sits a live console without a current certification under <span class=\"sopref\">SOP-GSOC-002</span>, and certification is per platform and per program.","b":"Every other procedure in the manual becoming unenforceable, because the person executing it was never assessed against it."},{"label":"Life safety","a":"Life safety outranks every other consideration in the manual, including scope, cost, client preference and chain of command. Escalate immediately, seek approval afterward.","b":"An operator holding on an internal line for a supervisor while somebody on camera runs out of time. There is no version of this that gets defended afterward."},{"label":"Contemporaneous record","a":"Every action is recorded at the time it happens. An action that is not recorded is treated, for audit purposes, as an action not taken.","b":"A shift that did everything right and cannot prove a single part of it. The work was real and the record is what gets read."},{"label":"Deviation","a":"Any deviation from a procedure is recorded in the relevant record with the reason, at the time it occurs, by the person who deviated. The Supervisor reviews it before closure.","b":"A workaround that becomes floor habit because nobody wrote down that it happened, and a procedure defect that never reaches the SOP Lead to be fixed."},{"label":"Falsification","a":"Falsifying a record, or backdating an entry, is grounds for immediate removal from the floor and is not treated as a training matter.","b":"One bad entry making every other record you have ever written contestable. Opposing counsel only needs to find the one."},{"label":"Feed access","a":"A client feed is opened for a legitimate operational purpose: an active alert, a structured patrol sweep, a feed health check, or following up something you observed yourself. Every access is logged.","b":"An access log with your name on it, read months later by somebody who was not there, does not know why you looked, and is not obliged to assume the best."}]},"gallery":{"tab":"The file","head":"The file on the rules","sub":"Two files. The five controls that apply to every procedure without exception, and the five people whose calls are not yours. Open a card for the detail. The bottom section stays sealed until you ask for it, so try to answer it yourself first.","note":"Read all ten and this section marks complete. Part A carries more than this, the glossary in Section A2 and the annex variables in Section A5 especially, and Day 3 spends the whole day on the annex.","cta":"Go to the sort","files":[{"key":"controls","label":"The five controls","items":[{"id":"c1","name":"No unverified action","real":"Part A · Section A4 · universal","teaser":"The one that separates a monitoring service from an alarm bell with a phone.","fields":[["What it requires","Nothing happens on the strength of an alert alone. No dispatch, no call to police, no client notification, until somebody has looked and can say what is actually there."],["The only exception","An explicit written exception in the Program Annex, approved by the Program Director. Not a verbal understanding, not an email, not \"the client prefers it\". <b>[CONFIRM]</b> whether any such exception exists for this program."],["How it fails in practice","Not by anyone deciding to break it. It fails at 3 a.m. on the fourth alert from a site that has been false eleven times running, when looking feels like a formality."],["What it costs","A wasted dispatch, a billed response, an officer walking into a situation nobody characterized, and a jurisdiction that starts treating your reports as noise."]],"sealedLabel":"what this means at the console","sealed":"Verification is not a step you can compress. Pull the live view, and where it is inconclusive review the recorded segment covering the alert window before you classify. If neither live nor recorded view is available, that is not a judgment call, it is a Level 2 escalation under <span class=\"sopref\">SOP-GSOC-007</span>. Do not infer."},{"id":"c2","name":"No unaccepted site","real":"Part A · Section A4 · universal","teaser":"A site on the roster and a site you can see are two different claims.","fields":[["What it requires","A site is not eligible for monitoring until <span class=\"sopref\">SOP-GSOC-004</span> records a full pass: every required view visible and controllable from the production console, every communication path working end to end."],["Who confirms it","The Platform SME and a certified operator together, working from the production console rather than a test rig. QA reviews the record before sign-off and the Program Supervisor approves go-live."],["How it fails in practice","Schedule pressure. A site goes live with one camera to be fixed later, and later arrives in the middle of an incident."],["What it costs","A client believing a site is covered when it is not. That is a risk they have not accepted and cannot manage, which is the worst kind."]],"sealedLabel":"what this means at the console","sealed":"If a site appears on your roster that you cannot see, or you can see a site that is not on your roster, both directions are a problem and both get raised. You are also part of this control: when you are certified, you may be the operator who signs an acceptance test, and a partial pass is not a pass."},{"id":"c3","name":"No uncertified operator","real":"Part A · Section A4 · universal","teaser":"The control that makes every other procedure enforceable.","fields":[["What it requires","A current certification under <span class=\"sopref\">SOP-GSOC-002</span> before you sit a live console. Certification is recorded with date, scope and expiry, and it is per platform and per program."],["Why per program","An operator certified on one program is not certified on another. The delta gets trained and assessed before console assignment, because the sites, contacts, thresholds and jurisdictions are all different."],["How it fails in practice","A staffing gap and a supervisor who needs a seat filled. It never looks like a violation from the inside, it looks like helping."],["What it costs","Every procedure the uncertified operator touched becomes indefensible, and the KPI that says 100 percent of console hours were staffed by certified operators becomes a false statement in a client report."]],"sealedLabel":"what this means at the console","sealed":"Percentage of console hours staffed by currently certified operators has a target of 100 percent. Any other figure is a control failure, not a metric to be trended. If you are asked to cover a console you are not certified for, the answer is that the Supervisor owns the coverage gap, and saying so is doing your job."},{"id":"c4","name":"Life safety outranks","real":"Part A · Section A4 · universal","teaser":"The only rule in the manual that explicitly beats the chain of command.","fields":[["What it requires","On a life-safety threat you escalate immediately and seek approval afterward. Scope, cost, client preference and chain of command all lose to it."],["How the levels behave","A life-safety event enters at Level 5 straight away and notifies up and down in parallel. You do not work up through the tiers first, and you do not wait for dispatch to finish."],["The stated asymmetry","No operator is ever criticized for escalating an event that turned out to be less serious than it appeared. Operators are held accountable for failing to escalate. <span class=\"sopref\">SOP-GSOC-011</span> requires this be said to every operator at certification."],["How it fails in practice","Hesitation dressed up as diligence. One more camera, one more minute, a quick check with the Shift Lead first."]],"sealedLabel":"what this means at the console","sealed":"Where verification is inconclusive and a life-safety outcome is plausible, you escalate as if it were a life-safety event. Over-escalation is recoverable. Under-escalation is not. That is <span class=\"sopref\">SOP-GSOC-007</span> as a control, not as advice, and Day 2 drills it until it is automatic."},{"id":"c5","name":"Contemporaneous record","real":"Part A · Section A4 · universal","teaser":"Work you did and did not log is work that did not happen.","fields":[["What it requires","Every action recorded as it happens, with its own timestamp. Not reconstructed at end of shift, not filled in once the outcome is known."],["Why the timing matters","The incident record opens at acknowledgement, before verification begins. Opening it retrospectively destroys the timing evidence every KPI in the SOW depends on."],["What gets logged","Every action, every escalation with level and recipient, and every attempted contact, not only the successful ones. An unanswered call at 02:14 is often the most important line in the record."],["How it fails in practice","A busy shift and an honest intention to write it up properly later. QA can see the gap between action time and entry time, and so can anyone else reading it."]],"sealedLabel":"what this means at the console","sealed":"Contemporaneity is a QA criterion in its own right under <span class=\"sopref\">SOP-GSOC-015</span>, and Day 9 is spent entirely on the record. The short version: if the incident system is down you switch to the documented manual log and timestamp at the moment of the action, then back-load it on restoration marked as reconstructed with the original times preserved. You never quietly rebuild a timeline."}]},{"key":"people","label":"Whose call it is","items":[{"id":"p1","name":"Shift Lead","real":"Section A3 · a function, not a person","teaser":"Console assignment, break rotation, and the first person you tell.","fields":[["Accountable for","Console assignment, break rotation, first-line operator support, and passdown accuracy. The tier exists where the floor size warrants one."],["When you go to them","A credential problem at shift start. A failed readiness check. Fatigue or impairment. Leaving the console. Anything that is not yet an incident but is not right either."],["What they decide that you do not","Who sits where, when you break, and whether a coverage gap gets filled or escalated."],["Where it is defined","Section A3, with the readiness and coverage detail in 005 and 006."]],"sealedLabel":"what they need from you","sealed":"Early and boring information. A borrowed password at shift start is a Shift Lead matter, and so is a camera that looked fine yesterday. Reporting fatigue is a professional obligation and is treated as one, not as an admission."},{"id":"p2","name":"Program Supervisor","real":"Section A3 · floor command","teaser":"Closes incidents, declares degraded operations, owns escalation quality.","fields":[["Accountable for","Floor command during shift, reviewing and supporting operator decisions, escalation quality, shift KPI performance, and declaring degraded operations."],["When you go to them","Level 2, which covers ambiguity, an alert surge, procedural doubt, repeat activity at one site, a dispatch that cannot be completed, and an unresolved classification."],["What they decide that you do not","Closure of an incident. You never close your own record, and the control is not waived for a busy shift (<span class=\"sopref\">SOP-GSOC-008</span>). They also decide whether degraded operations are declared, and they countersign passdowns."],["Where it is defined","Section A3, with closure in 008, degraded operations in 013, and handover in 009."]],"sealedLabel":"what they need from you","sealed":"A Level 2 raised early rather than a problem handed over solved and unexplained. Note the shape of the relationship: they support your decisions and they own the quality of your escalations, which means telling them about a surge while it is running is part of handling the surge."},{"id":"p3","name":"Quality Assurance","real":"Section A3 · independent of the floor","teaser":"Reads your records afterward, and is not there to catch you out.","fields":[["Accountable for","Independent sampling of incident records against procedure, findings and trend reporting, and validating that KPI capture is accurate."],["What gets reviewed rather than sampled","100 percent of Level 5 and Level 6 events, every false-alert dispatch, every failed dispatch, and every degraded-operations period. Those are not a sample."],["What they decide that you do not","Whether a record meets the standard, and whether a finding is an observation, a minor, a major or a critical control failure."],["Where it is defined","Section A3 and <span class=\"sopref\">SOP-GSOC-015</span>, with the review criteria worth reading before Day 9."]],"sealedLabel":"what they need from you","sealed":"A record that reads the same to somebody who was not there. Worth knowing: a finding that recurs across several operators is treated as a defect in the manual or in training, not as a discipline matter. Blaming individuals for a systemic defect guarantees the defect survives, and that is written into the procedure."},{"id":"p4","name":"Platform SME","real":"Section A3 · technical authority","teaser":"Owns the configuration baseline. You do not improvise on production.","fields":[["Accountable for","Technical validation of monitored systems, site setup execution, the firmware and configuration baseline, and degraded-capability assessment."],["When you go to them","A fault that first-line remediation did not fix, a unit behaving oddly, or a permission question. Route through the Shift Lead or Supervisor per the program support path."],["What they decide that you do not","Configuration, detection zones, presets where those are locked, firmware, and whether a capability is genuinely degraded. <b>[CONFIRM]</b> support contacts and response commitments per platform."],["Where it is defined","Section A3, with setup in 004 and fault handling in 013."]],"sealedLabel":"what they need from you","sealed":"The fault logged at the moment of detection with site, component, symptom, time and observed impact, and the scope established. Check a second site before you call it a single-site fault, because a systemic fault reads as a single-site one first. Attempt documented first-line remediation only."},{"id":"p5","name":"Program Director","real":"Section A3 · approves, accepts risk, speaks outward","teaser":"Everything that leaves the GSOC goes through here.","fields":[["Accountable for","Approval of the manual and every Program Annex, the client relationship, law-enforcement escalation policy, and acceptance of residual risk on any open exception."],["When it reaches them","Level 6: a fatality or serious injury, media exposure, a multi-site event, a major service failure, or regulatory contact."],["What they decide that you do not","Any release of records or evidence outside the GSOC, including to law enforcement outside a live emergency. Every external enquiry, every disclosure, every legal hold release, and re-entry of a decertified operator into certification."],["Where it is defined","Section A3, with disclosure in <span class=\"sopref\">SOP-GSOC-018</span> and external enquiries in <span class=\"sopref\">SOP-GSOC-012</span>."]],"sealedLabel":"what they need from you","sealed":"The enquiry routed without a detail confirmed, including whether an incident occurred at all, and a record of the refusal with the caller detail. Media, insurers, attorneys and the public get nothing from you. Saying \"I am not the right person for that, let me route you\" is the whole script."}]}]},"sort":{"tab":"Whose call","head":"Whose call is it?","sub":"Twelve actions, three files. Put each one with whoever owns the decision. Drag them, or tap an action and then tap the file you want it in. Get all twelve and this section clears. Placements stay put if you leave and come back.","cta":"Skip ahead to the field test","win":"Twelve for twelve. Notice the pattern: what you own is immediate and observable, what the Supervisor owns is anything that changes the service, and what the Director owns is anything that leaves the building.","bins":[{"key":"op","label":"Yours, now","sub":"Operator acts"},{"key":"sup","label":"Shift Lead or Supervisor","sub":"Escalate, do not absorb"},{"key":"dir","label":"Program Director","sub":"Route it, confirm nothing"}],"items":[{"name":"Call 911 on a verified life-safety event","bin":"op","why":"Yours, immediately. You do not seek supervisor approval first and you do not wait for dispatch to complete. 011."},{"name":"Raise a manual alert on something you spotted","bin":"op","why":"Yours. An operator-observed event is entered as a manually raised alert and handled under 001. An observation acted on without a record does not exist. 006."},{"name":"Record a deviation you just made","bin":"op","why":"Yours, at the time, with the reason, by the person who deviated. Part A, Section A8. The Supervisor reviews it before closure, which is a different step."},{"name":"Report a frozen feed before declaring readiness","bin":"op","why":"Yours. Every failed check is reported before readiness is declared, never after and never once it gets quiet. 005."},{"name":"Apply a legal hold when police respond","bin":"op","why":"Yours, immediately, then notify the Supervisor. A law-enforcement response is presumptive grounds and you do not wait for formal notice. 018."},{"name":"Close the incident you just worked","bin":"sup","why":"Not yours. Closure is a supervisory act, and an operator does not close their own incident. The control is never waived for a busy shift. 008."},{"name":"Declare degraded operations","bin":"sup","why":"The Program Supervisor declares it, records the time and scope, and states which capabilities are affected. You log the fault and escalate. 013."},{"name":"Take a console nobody was assigned to","bin":"sup","why":"Coverage gaps caused by staffing shortfall are the Supervisor to resolve. An operator does not silently absorb an unassigned console. 006."},{"name":"Decide a dark site is acceptable for now","bin":"sup","why":"A full site dark is a significant impact: Level 2, degraded operations declared, client notified. Not an operator judgment call. 013."},{"name":"Answer a reporter about last night","bin":"dir","why":"Media get nothing, including whether an incident occurred. Route to the Program Director and record the enquiry and the routing. 012."},{"name":"Hand footage to a detective next week","bin":"dir","why":"Outside a live emergency, every records request routes through the Program Director, who verifies identity and legal authority. 018."},{"name":"Release a clip to an insurer","bin":"dir","why":"Same route. Operators and supervisors do not release records directly, and the client gets notified of the third-party request unless the GSOC is legally prohibited from saying so. 018."}]},"field":{"tab":"Field test","head":"Field test","sub":"Three situations where the rule and the comfortable option point in different directions. Pick the line you would actually take. Every ending explains why it landed where it did, and you can run any of them again.","scenarios":[{"id":"f1","line":"SOP-GSOC-006 · 018","title":"A favor, at 01:20","setup":"A colleague from another account walks over. There was a fender bender in a client parking lot last night, his cousin was involved, and he asks you to pull up the camera and see what happened. He is friendly, senior to you, and not asking you to do anything he thinks is wrong.","start":"n1","nodes":{"n1":{"text":"The site is on your roster. You have the access. It would take ninety seconds and there is no alert running.","choices":[{"t":"Open the feed. It is a real incident at a real client site and he works here.","to":"n2a"},{"t":"Decline, and tell him why, then tell him where the request actually goes.","to":"win1"},{"t":"Open it but save nothing and tell nobody.","to":"n2c"}]},"n2a":{"text":"You pull the recorded segment. He looks over your shoulder, thanks you, and goes back to his desk. Nothing else happens tonight.","choices":[{"t":"Log the access with the reason, so at least the record is honest.","to":"mid1"},{"t":"Leave it. It was ninety seconds and nothing came of it.","to":"loss1"}]},"n2c":{"text":"You open it, watch, and close it. You did not export anything and you did not write anything down.","choices":[{"t":"Realize the access itself is the record and log it now.","to":"mid1"},{"t":"Carry on with the shift.","to":"loss1"}]},"win1":{"end":true,"win":true,"verdict":"Held the standard","text":"You tell him you cannot open a feed without an operational purpose, that every access is logged against your name, and that a request tied to a claim goes to the Program Director, who can release material to the right party properly. He is not thrilled and he does not argue.","why":"A feed is opened for four reasons: an active alert, a structured patrol sweep, a health check, or following up something you observed. Curiosity is not one of them, and neither is a favor. <span class=\"sopref\">SOP-GSOC-012</span> routes the request upward, and <span class=\"sopref\">SOP-GSOC-018</span> is what makes the release defensible if it happens at all. Saying no here is the cheapest version of this whole scenario."},"mid1":{"end":true,"win":false,"verdict":"Partial","text":"The access is logged with an honest reason, which means when it surfaces in a review there is at least a straight account of it. There is still an access with no operational purpose attached to your name, and the claim now has a viewing nobody authorized.","why":"Logging it honestly is the right instinct and it does not undo the access. The control is the purpose test, not the paperwork afterward. Worth noticing how far a reasonable-sounding ask got before anything looked like a rule being broken."},"loss1":{"end":true,"win":false,"verdict":"Setback","text":"Two months later the insurer disputes the claim, the footage is requested formally, and the access log is pulled. There is a viewing at 01:20 by you, with no alert, no sweep and no purpose recorded. Nobody asks you about it first. They ask the Program Director.","why":"Every access is logged and the log gets read by people who were not there, do not know why you looked, and are not obliged to assume the best. Unlogged or unexplained access is indistinguishable from tampering once it is challenged, and the person who accessed it will not be believed simply because they were acting properly."}}},{"id":"f2","line":"SOP-GSOC-000 A1 · 003","title":"One more thing, while you are in there","setup":"A client-side facilities manager calls the floor directly. A different building of theirs has cameras that your program does not monitor. He is having a bad week, and he asks if you can just keep an eye on it overnight. He is authorized on your contact list.","start":"n1","nodes":{"n1":{"text":"You could add the feed to your view if the access existed. It does not, but you could watch the parking area through a camera at the edge of a site you do monitor.","choices":[{"t":"Agree to keep an eye on it. He is an authorized contact and it costs nothing.","to":"n2a"},{"t":"Tell him it is not in scope, take the request properly, and route it.","to":"win1"},{"t":"Refuse flatly and get back to the queue.","to":"mid2"}]},"n2a":{"text":"You watch it loosely between sweeps. At 04:10 something happens there, and you are looking at a different site.","choices":[{"t":"Tell the Supervisor now, including that you agreed to watch it.","to":"mid1"},{"t":"Handle it quietly, since the site is not really yours anyway.","to":"loss1"}]},"win1":{"end":true,"win":true,"verdict":"Held the standard","text":"You tell him the building is not on the monitored site list, so nothing there is being watched tonight, and that you are logging the request and passing it to the Supervisor and the Program Director. He is disappointed and he knows exactly where he stands, which is the part that matters.","why":"If a commitment is not in the SOW and not in the annex, it is not in scope, and an operator is not expected to deliver it. The GSOC does not monitor to a verbal understanding, an email or a slide (<span class=\"sopref\">SOP-GSOC-003</span>). Telling him plainly is not unhelpful, it is the only answer that does not leave him believing in coverage that does not exist."},"mid2":{"end":true,"win":false,"verdict":"Partial","text":"He gets a correct answer and no route forward. He calls his own account manager instead, annoyed, and the request arrives at the Program Director anyway with a complaint attached to it.","why":"Scope was right and the handling was not. A refusal with no route is how a reasonable request turns into an escalation about the GSOC rather than about the building. Record the enquiry, say where it goes, and let it go there."},"mid1":{"end":true,"win":false,"verdict":"Partial","text":"You brief the Supervisor at 04:15. The incident at the unmonitored building is not yours to handle, the client is told what was and was not covered, and there is an uncomfortable conversation about what you agreed to at midnight.","why":"Telling the Supervisor was right and the exposure was already created when you agreed. A client operating on a false belief about their coverage is exposed to a risk they never accepted, which is the same failure as understating a degraded period."},"loss1":{"end":true,"win":false,"verdict":"Setback","text":"You call the facilities manager directly, off the record, and it gets messy. The client believes the GSOC was monitoring a building it was never contracted to monitor, and now believes it did so badly.","why":"Out-of-scope work does not create a smaller obligation, it creates an undefined one. The moment you accepted it informally, every failure at that building became a GSOC failure in the client's account of the night, with no SOW, no annex and no record to explain any of it."}}},{"id":"f3","line":"Part A · A8 · 008","title":"You skipped a step at 04:40","setup":"Two alerts landed at once. To keep up, you verified the second one and dispatched before you had opened its incident record, then opened the record after the officer was already moving. Everything turned out fine. Your shift ends in twenty minutes.","start":"n1","nodes":{"n1":{"text":"Nobody saw it. The record is complete now and the timestamps in it are the ones you remember rather than the ones the system captured.","choices":[{"t":"Write the record with the times as they actually happened, and record the deviation with the reason.","to":"win1"},{"t":"Adjust the acknowledgement time so the sequence reads correctly.","to":"loss1"},{"t":"Leave the record as it is and mention it verbally to the Shift Lead on the way out.","to":"n2c"}]},"n2c":{"text":"You tell the Shift Lead as you are leaving. He nods, he is mid-handover himself, and nothing is written down.","choices":[{"t":"Go back and record the deviation in the record before you leave.","to":"win1"},{"t":"It is said out loud, which is enough.","to":"mid1"}]},"win1":{"end":true,"win":true,"verdict":"Held the standard","text":"The record carries the real sequence and a line stating that the record was opened after dispatch, why, and that the surge was in progress. The Supervisor reviews it before closure and the deviation goes into the exception review. It turns out three operators have done the same thing during surges, and the triage step gets looked at.","why":"A deviation recorded at the time, with the reason, by the person who deviated, is exactly what Section A8 asks for. The second part is the part people miss: a deviation that reveals a procedure is unworkable in practice is a defect in the manual, routed to the SOP Lead as a change request rather than absorbed quietly by the floor. Your honest line is what makes the fix possible."},"mid1":{"end":true,"win":false,"verdict":"Partial","text":"The Supervisor hears about it and the record does not say it. QA samples the incident three weeks later, sees a dispatch that precedes the record opening, and raises a finding with no explanation attached to it.","why":"Verbal is not a record. A deviation lives in the relevant record because that is what gets read later, and an unexplained gap in a timeline is read as carelessness by default. You had the explanation and did not put it where it would be found."},"loss1":{"end":true,"win":false,"verdict":"Setback","text":"The record reads cleanly. The platform's own access and event logs do not, and they are what QA reconciles KPI values against. The discrepancy is found, and it is not treated as a documentation error.","why":"Falsifying a record or backdating an entry is grounds for immediate removal from the floor and is explicitly not a training matter. The original sin here was tiny and recoverable. The cover was not, and it puts every record you have ever written into question."}}}]},"quiz":{"pass":8,"passMsg":"Eight or better means the governance layer is holding. Day 2 is the escalation framework, and it assumes everything here is automatic.","failMsg":"Under eight. Worth another pass through the five control cards before you retake it, since most misses cluster there.","items":[{"q":"An SOP is silent on a question. What governs?","opts":[{"t":"Part A. Governance content is stated once there and is not repeated in individual SOPs.","ok":true,"why":"That is the structural principle of the whole manual. Definitions, roles, escalation levels, document control and non-compliance live in Part A, and each SOP carries only what is specific to it."},{"t":"Whatever the floor has been doing, since practice fills the gaps.","ok":false,"why":"No local, floor-level or client-level variation of a procedure is valid unless issued as a controlled revision or recorded in an approved Program Annex."},{"t":"The Program Annex, which overrides the manual.","ok":false,"why":"The annex binds the variables, it does not answer governance questions. It says which contacts, which sites, which thresholds. It does not redefine how escalation works."},{"t":"The Shift Lead's judgment for the duration of the shift.","ok":false,"why":"The Shift Lead handles console assignment, rotation and first-line support. Procedural gaps route to the SOP Lead as a change request, not to a shift-level decision."}]},{"q":"What does a CONTROL mean in this manual?","opts":[{"t":"A hard gate. The procedure cannot proceed past it until it is satisfied.","ok":true,"why":"Controls are the auditable checkpoints, and deviating from one is a critical non-compliance reported to the SOP Lead and Program Director within one shift."},{"t":"A recommended practice that applies in most circumstances.","ok":false,"why":"That reading is exactly what the convention exists to prevent. Controls are not guidance and they are not weighted against workload."},{"t":"A KPI that gets reported to the client each period.","ok":false,"why":"KPIs are defined separately in 016. Some controls have metrics attached, like certified console hours, but a control is a gate, not a measure."},{"t":"A program-level item that has not been decided yet.","ok":false,"why":"That is [CONFIRM], the other convention. A [CONFIRM] is an open item with a named owner. A CONTROL is a closed rule."}]},{"q":"You are the only person on the floor and you see something on camera that looks like a person collapsing. You are not sure. Your Supervisor is on a call.","opts":[{"t":"Escalate as if it were life safety, immediately, and notify the Supervisor in parallel.","ok":true,"why":"Where verification is inconclusive and a life-safety outcome is plausible you escalate as if it were real. Over-escalation is recoverable, under-escalation is not, and nobody is criticized for the first one."},{"t":"Keep watching until you are confident, then escalate.","ok":false,"why":"That is hesitation dressed as diligence. Life safety outranks everything in the manual including the chain of command, and the threshold for escalating is deliberately low."},{"t":"Wait for the Supervisor to come off the call, since a Level 5 is a big step.","ok":false,"why":"An operator facing a life-safety threat escalates immediately and seeks approval afterward. The operator does not wait for supervisor availability. That is stated explicitly in 011."},{"t":"Dispatch the on-site officer first and see what they find.","ok":false,"why":"An officer is never the sole response to a verified life-safety situation. Emergency services are engaged in parallel, not after the officer reports back."}]},{"q":"A client contact asks the floor to monitor something that is not in the SOW. They are an authorized contact and they are polite about it.","opts":[{"t":"It is out of scope until it is contracted and bound in the annex, and the request gets recorded and routed.","ok":true,"why":"A capability must be scoped and paid for before the GSOC delivers it, and that is not subject to operator or supervisor discretion. The GSOC does not monitor to a verbal understanding, an email or a slide."},{"t":"Being on the authorized contact list makes the request in scope.","ok":false,"why":"The contact list governs who may receive notification and confirm site data. It does not expand what was contracted."},{"t":"Do it if it costs nothing, since goodwill is part of the service.","ok":false,"why":"Undefined coverage is worse than no coverage. The client ends up believing in monitoring that has no SOW, no annex, no staffing model and no record."},{"t":"Refuse, and there is nothing further to do.","ok":false,"why":"Half right. Scope is correct, but every external request is recorded with the routing applied, and the request goes where it can actually be decided."}]},{"q":"Why does the incident record open at acknowledgement rather than at closure?","opts":[{"t":"Opening it retrospectively destroys the timing evidence the KPIs depend on.","ok":true,"why":"The record clock starts at acknowledgement, not at closure, and acknowledgement time and alert time are logged as separate values. Every committed response metric is measured off those timestamps."},{"t":"So the client can watch the incident develop in real time.","ok":false,"why":"Client notification happens at Level 4 against a threshold in the annex. The incident system is the record, not a live feed for the client."},{"t":"It is a convention with no particular consequence.","ok":false,"why":"It is a control with a stated reason. QA can see the difference between a contemporaneous record and a reconstructed one, and so can anyone reading it later."},{"t":"Because the operator needs somewhere to store the clip.","ok":false,"why":"Evidence gets referenced in the record, but that is not why the record opens first. The reason is the timing evidence."}]},{"q":"Who closes an incident?","opts":[{"t":"The Program Supervisor, after reviewing it for completeness and accuracy.","ok":true,"why":"Closure is a supervisory act, not an operator act. An operator does not close their own incident, and the control is never waived for a busy shift, because review is what keeps documentation quality from drifting."},{"t":"The operator who worked it, once the narrative is finished.","ok":false,"why":"That is the one thing the control forbids. The operator submits for review and the Supervisor either approves closure or returns it with specified deficiencies."},{"t":"Quality Assurance, as part of sampling.","ok":false,"why":"QA reviews records after the fact and is functionally independent of the floor. Sampling is not closure."},{"t":"Whoever is on shift when the incident goes quiet.","ok":false,"why":"Open incidents transfer across a handover with their status and next action. They do not close because a shift ended."}]},{"q":"A reporter calls the floor and asks whether there was an incident at a client site last night.","opts":[{"t":"Confirm nothing, including whether an incident occurred, route to the Program Director, and record the enquiry.","ok":true,"why":"Media, insurers, attorneys and the public are never given information, and that includes confirming that an incident happened. Every external enquiry is recorded with caller detail and the routing applied, even the refused ones."},{"t":"Confirm the basic facts only, and refer anything detailed upward.","ok":false,"why":"There is no basic-facts tier for an external enquiry. Confirming an incident occurred is itself information about the client."},{"t":"Say no comment and hang up without recording it.","ok":false,"why":"The refusal is right and the missing record is not. Refused enquiries are logged too, because the pattern of who is calling matters."},{"t":"Take their number and ask the client what they would like you to say.","ok":false,"why":"Handling external enquiries is the Program Director's, not the client contact's, and not something to be negotiated on the floor at the time."}]},{"q":"You are asked to cover a console for a program you are not certified on. It is one shift and the floor is short.","opts":[{"t":"Decline. No operator sits a live console without a current certification for that program and platform, and the coverage gap is the Supervisor's to resolve.","ok":true,"why":"Certification is per platform and per program, and the delta must be trained and assessed before console assignment. The target for certified console hours is 100 percent, and any other figure is a control failure rather than a metric."},{"t":"Cover it, since a certified operator is nearby if anything happens.","ok":false,"why":"Proximity is not supervision and it is not certification. Every procedure executed on that console would be indefensible."},{"t":"Cover it read-only, without acknowledging anything.","ok":false,"why":"A console being watched by someone who cannot act on what they see is not coverage, and it puts you in the position of seeing a life-safety event you are not authorized to work."},{"t":"Cover it and note in the passdown that you were not certified.","ok":false,"why":"Recording a control breach does not cure it. Controls are gates, and this one has no version that is satisfied by disclosure."}]},{"q":"During a surge you skip a step to keep up. The outcome is fine. What does the manual require?","opts":[{"t":"Record the deviation with the reason, at the time, in the relevant record, and the Supervisor reviews it before closure.","ok":true,"why":"That is Section A8. It also routes the underlying problem: a deviation that shows a procedure is unworkable in practice is a defect in the manual and goes to the SOP Lead as a change request rather than being absorbed quietly by the floor."},{"t":"Nothing, because the outcome was correct and no harm resulted.","ok":false,"why":"Deviation handling is about the procedure, not the outcome. An unrecorded workaround becomes floor habit, and the defect never gets fixed."},{"t":"Adjust the record so the sequence reads correctly.","ok":false,"why":"That is falsification, grounds for immediate removal from the floor, and explicitly not a training matter. It also converts a small recoverable problem into a permanent one."},{"t":"Mention it verbally at handover and leave the record clean.","ok":false,"why":"Verbal is not a record. An unexplained gap in a timeline is read as carelessness by whoever samples it, and you had the explanation."}]},{"q":"QA finds the same failure across five different operators. What happens?","opts":[{"t":"It is treated as a defect in the manual or in training and routed to the SOP Lead or Training Lead.","ok":true,"why":"That is a control in 015: findings recurring across multiple operators are not a discipline matter, because blaming individuals for a systemic defect guarantees the defect persists."},{"t":"All five operators get individual coaching.","ok":false,"why":"Coaching five people for one curriculum gap fixes nothing and produces a sixth. The trend is the finding."},{"t":"All five are decertified pending reassessment.","ok":false,"why":"Decertification is reserved for critical control deviation, record falsification, or failure of reassessment. A shared gap is not that."},{"t":"It is logged and trended without further action.","ok":false,"why":"Every finding has a named owner, an agreed corrective action and a due date. A finding with no owner is not a finding."}]}]}};
+const NS = 'gsoc:' + SPEC.id + ':';
+
+/* ============================ STORAGE ============================ */
+const mem = {};
+const store = {
+  async get(k, shared=false){
+    const mk = (shared?'s:':'p:')+k;
+    try{
+      if(window.storage){ const r = await window.storage.get(k, shared); if(r) return JSON.parse(r.value); }
+    }catch(e){}
+    try{
+      const raw = window.localStorage && localStorage.getItem(mk);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return mk in mem ? mem[mk] : null;
+  },
+  async set(k, v, shared=false){
+    const mk = (shared?'s:':'p:')+k;
+    mem[mk] = v;
+    const json = JSON.stringify(v);
+    try{ if(window.storage) await window.storage.set(k, json, shared); }catch(e){}
+    try{ if(window.localStorage) localStorage.setItem(mk, json); }catch(e){}
+  }
+};
+
+let PROFILE = { name:"", share:false };
+let PROGRESS = { visited:[], dossiers:[], sortBest:null, scenarios:[], quizTaken:false,
+  lastTab:null, revealed:[], sortState:null, scenState:null, quizState:null, updatedAt:null };
+let ATTEMPTS = [];
+
+async function loadAll(){
+  const p = await store.get(NS+'profile'); if(p) PROFILE = Object.assign(PROFILE, p);
+  const g = await store.get(NS+'progress'); if(g) PROGRESS = Object.assign(PROGRESS, g);
+  const a = await store.get(NS+'attempts'); if(Array.isArray(a)) ATTEMPTS = a;
+}
+const saveProfile  = () => store.set(NS+'profile', PROFILE);
+const saveAttempts = () => store.set(NS+'attempts', ATTEMPTS);
+function saveProgress(){
+  PROGRESS.updatedAt = new Date().toISOString();
+  paintSaved();
+  return store.set(NS+'progress', PROGRESS);
+}
+function ago(iso){
+  if(!iso) return '';
+  const s = (Date.now() - new Date(iso))/1000;
+  if(s < 90) return 'a moment ago';
+  if(s < 3600) return Math.round(s/60) + ' minutes ago';
+  if(s < 86400) return Math.round(s/3600) + ' hours ago';
+  const d = Math.round(s/86400);
+  return d === 1 ? 'yesterday' : d + ' days ago';
+}
+function paintSaved(){
+  const e = document.getElementById('savedAt');
+  if(e) e.textContent = PROGRESS.updatedAt ? 'Saved ' + ago(PROGRESS.updatedAt) : '';
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function toast(btnId, msg){
+  const b = document.getElementById(btnId); if(!b) return;
+  const old = b.textContent; b.textContent = msg; setTimeout(()=>b.textContent=old, 1400);
+}
+
+/* ============================ SHELL ============================ */
+const TABS = [
+  { id:"brief",   label:"Brief" },
+  { id:"ledger",  label:SPEC.ledger.tab },
+  { id:"gallery", label:SPEC.gallery.tab },
+  { id:"sort",    label:SPEC.sort.tab },
+  { id:"field",   label:SPEC.field.tab },
+  { id:"quiz",    label:"Assessment" },
+  { id:"records", label:"Records" }
+];
+let current = "brief";
+const GAL_TOTAL = SPEC.gallery.files.reduce((n,f)=>n+f.items.length,0);
+
+function tabLabel(id){ const t = TABS.find(x => x.id === id); return t ? t.label : id; }
+
+function buildHead(){
+  document.getElementById('mcode').textContent = SPEC.code;
+  document.getElementById('mtag').textContent = SPEC.caseTag;
+  document.getElementById('mest').textContent = 'Est. ' + SPEC.est;
+  document.getElementById('mtitle').innerHTML =
+    (SPEC.dayBox ? `<span class="tagbox">${SPEC.dayBox}</span>` : '') +
+    SPEC.title.map((t,i) => i === SPEC.accentLine ? `<span class="a">${t}</span>` : t).join('<br>');
+  document.getElementById('mdek').textContent = SPEC.dek;
+  document.getElementById('msrc').innerHTML = 'Source procedures <b>' + SPEC.sources + '</b>';
+  document.getElementById('mfoot').innerHTML = SPEC.foot;
+}
+function buildTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = TABS.map(t =>
+    `<button role="tab" data-tab="${t.id}" aria-selected="${t.id===current}">${esc(t.label)}<span class="dot"></span></button>`
+  ).join('');
+  nav.querySelectorAll('button').forEach(b => b.onclick = () => go(b.dataset.tab));
+}
+function go(id){
+  current = id;
+  document.querySelectorAll('section.view').forEach(s => s.classList.toggle('on', s.id === 'v-'+id));
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab===id));
+  if(!PROGRESS.visited.includes(id)) PROGRESS.visited.push(id);
+  PROGRESS.lastTab = id;
+  saveProgress();
+  RENDER[id] && RENDER[id]();
+  paintProgress();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+function completion(){
+  return {
+    brief:   PROGRESS.visited.includes('brief'),
+    ledger:  PROGRESS.revealed.length >= SPEC.ledger.rows.length,
+    gallery: PROGRESS.dossiers.length >= GAL_TOTAL,
+    sort:    PROGRESS.sortBest === SPEC.sort.items.length,
+    field:   PROGRESS.scenarios.length >= SPEC.field.scenarios.length,
+    quiz:    PROGRESS.quizTaken,
+    records: ATTEMPTS.length > 0
+  };
+}
+function paintProgress(){
+  const c = completion();
+  const keys = ['brief','ledger','gallery','sort','field','quiz'];
+  const done = keys.filter(k => c[k]).length;
+  const pct = Math.round(done/keys.length*100);
+  document.getElementById('pbar').style.width = pct+'%';
+  document.getElementById('ptext').textContent = pct+'% complete';
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('done', !!c[b.dataset.tab]));
+}
+function showResume(){
+  const box = document.getElementById('resume');
+  const q = PROGRESS.quizState;
+  const c = completion(), keys = ['brief','ledger','gallery','sort','field','quiz'];
+  const n = keys.filter(k => c[k]).length;
+  box.innerHTML = `<div class="t"><b>Welcome back${PROFILE.name ? ', ' + esc(PROFILE.name) : ''}</b>
+      You stopped in ${esc(tabLabel(PROGRESS.lastTab))} ${ago(PROGRESS.updatedAt)}. ${n} of 6 sections done${q ? `, and an assessment is sitting open at question ${q.qi + 1}` : ''}. Nothing was lost.</div>
+    ${q ? `<button class="btn" id="resQuiz">Resume the assessment</button>` : ''}
+    <button class="btn ghost" id="resDismiss">Keep going</button>`;
+  box.classList.add('on');
+  box.querySelector('#resDismiss').onclick = () => box.classList.remove('on');
+  if(q) box.querySelector('#resQuiz').onclick = () => { box.classList.remove('on'); go('quiz'); resumeQuiz(); };
+}
+
+/* ============================ VIEW: BRIEF ============================ */
+const RENDER = {};
+RENDER.brief = function(){
+  const el = document.getElementById('v-brief');
+  if(el.dataset.built) return;
+  el.dataset.built = 1;
+  el.innerHTML = `
+    <span class="eyebrow">Start here</span>
+    <h2>${esc(SPEC.brief.head)}</h2>
+    <p class="sub">${SPEC.brief.sub}</p>
+
+    ${SPEC.brief.control ? `<div class="ctrl"><span class="lab">Control</span><p>${SPEC.brief.control}</p></div>` : ''}
+
+    <div class="panel" style="margin-bottom:26px">
+      <div class="hint" style="margin-bottom:10px">Sign in for the competency record</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input type="text" id="nameIn" placeholder="Your name or employee ID" value="${esc(PROFILE.name)}" style="flex:1">
+        <button class="btn" id="nameSave">Save name</button>
+      </div>
+      <label class="check" style="margin-top:14px">
+        <input type="checkbox" id="shareIn" ${PROFILE.share?'checked':''}>
+        Add my result to the shared cohort roster
+      </label>
+      <p class="note" style="margin:8px 0 0">Off by default. Your scores stay on this device either way. Turn it on and your name, score, and date also go to a roster the Training Lead and everyone else in the cohort can read. Nothing here is the competency record of ${SPEC.certRef} on its own. The Training Lead records that separately.</p>
+    </div>
+
+    <h3>The parts</h3>
+    <div class="ledger">
+      ${SPEC.brief.parts.map(([k,v]) => `<div class="row"><div class="label">${esc(k)}</div><div style="font-size:15px">${v}</div></div>`).join('')}
+    </div>
+
+    ${SPEC.brief.anchors ? `
+      <h3>${esc(SPEC.brief.anchors.head)}</h3>
+      <div class="panel">
+        <ol style="margin:0;padding-left:20px">
+          ${SPEC.brief.anchors.items.map(t => `<li style="margin-bottom:10px">${t}</li>`).join('')}
+        </ol>
+      </div>` : ''}
+
+    <div style="margin-top:28px"><button class="btn" id="goLedger">${esc(SPEC.brief.cta)}</button></div>
+  `;
+  document.getElementById('nameSave').onclick = () => {
+    PROFILE.name = document.getElementById('nameIn').value.trim();
+    saveProfile(); toast('nameSave','Saved');
+  };
+  document.getElementById('shareIn').onchange = e => { PROFILE.share = e.target.checked; saveProfile(); };
+  document.getElementById('goLedger').onclick = () => go('ledger');
+};
+
+/* ============================ VIEW: LEDGER ============================ */
+RENDER.ledger = function(){
+  const L = SPEC.ledger;
+  const el = document.getElementById('v-ledger');
+  el.innerHTML = `
+    <span class="eyebrow">Part one</span>
+    <h2>${esc(L.head)}</h2>
+    <p class="sub">${L.sub}</p>
+    <div class="ledger">
+      ${L.rows.map((r,i) => {
+        const hideB = i % 2 === 0;
+        const A = `<div class="cell"><span class="who">${esc(L.colA)}</span><span class="txt">${r.a}</span></div>`;
+        const B = `<div class="cell b${L.negB?' neg':''}"><span class="who">${esc(L.colB)}</span><span class="txt">${r.b}</span></div>`;
+        const hidden = () => `<div class="cell${hideB?(' b'+(L.negB?' neg':'')):''} reveal" data-rev="${i}"><span class="who">${esc(hideB?L.colB:L.colA)}</span><span class="txt masked">${hideB?r.b:r.a}</span></div>`;
+        return `<div class="row"><div class="label">${esc(r.label)}</div><div class="cols">
+          ${hideB ? A + hidden() : hidden() + B}
+        </div></div>`;
+      }).join('')}
+    </div>
+    <div style="margin-top:26px"><button class="btn" id="toGallery">${esc(L.cta)}</button></div>
+  `;
+  el.querySelectorAll('[data-rev]').forEach(d => {
+    const idx = +d.dataset.rev;
+    const open = () => { d.classList.add('open'); const m = d.querySelector('.masked'); if(m) m.classList.remove('masked'); };
+    if(PROGRESS.revealed.includes(idx)) open();
+    d.onclick = () => {
+      open();
+      if(!PROGRESS.revealed.includes(idx)){ PROGRESS.revealed.push(idx); saveProgress(); paintProgress(); }
+    };
+  });
+  el.querySelector('#toGallery').onclick = () => go('gallery');
+};
+
+/* ============================ VIEW: GALLERY ============================ */
+let galFile = 0;
+RENDER.gallery = function(){
+  const G = SPEC.gallery;
+  const f = G.files[galFile];
+  const alt = galFile === 1;
+  const el = document.getElementById('v-gallery');
+  el.innerHTML = `
+    <span class="eyebrow${alt?' alt':''}">Part two</span>
+    <h2>${esc(G.head)}</h2>
+    <p class="sub">${G.sub}</p>
+    <div class="side-switch">
+      ${G.files.map((x,i) => `<button class="${i===galFile?('on'+(i===1?' alt':'')):''}" data-file="${i}">${esc(x.label)}</button>`).join('')}
+    </div>
+    <div class="dossiers">
+      ${f.items.map((v,i) => `
+        <div class="card ${alt?'alt':''} ${PROGRESS.dossiers.includes(v.id)?'read':''}" data-open="${v.id}">
+          <div class="no">${String(i+1).padStart(2,'0')} / ${String(f.items.length).padStart(2,'0')}</div>
+          <div class="nm">${esc(v.name)}</div>
+          <div class="real">${esc(v.real)}</div>
+          <div class="teaser">${v.teaser}</div>
+          <span class="more">${PROGRESS.dossiers.includes(v.id)?'Reviewed · open again':'Open the card'}</span>
+        </div>`).join('')}
+    </div>
+    <p class="note" style="margin-top:18px">${G.note}</p>
+    <div style="margin-top:24px"><button class="btn" id="toSort">${esc(G.cta)}</button></div>
+  `;
+  el.querySelectorAll('[data-file]').forEach(b => b.onclick = () => { galFile = +b.dataset.file; RENDER.gallery(); });
+  el.querySelectorAll('[data-open]').forEach(c => c.onclick = () => openDossier(c.dataset.open));
+  el.querySelector('#toSort').onclick = () => go('sort');
+};
+
+function findItem(id){
+  for(let i=0;i<SPEC.gallery.files.length;i++){
+    const it = SPEC.gallery.files[i].items.find(x => x.id === id);
+    if(it) return { it, fi:i };
+  }
+  return null;
+}
+function openDossier(id){
+  const found = findItem(id); if(!found) return;
+  const { it:v, fi } = found;
+  const alt = fi === 1;
+  const d = document.getElementById('dossier');
+  d.className = 'dossier' + (alt?' alt':'');
+  d.innerHTML = `
+    <button class="close" aria-label="Close">&times;</button>
+    <span class="eyebrow${alt?' alt':''}">${esc(SPEC.gallery.files[fi].label)}</span>
+    <h4>${esc(v.name)}</h4>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em">${esc(v.real)}</div>
+    <div style="margin-top:18px">
+      ${v.fields.map(([k,t]) => `<div class="field"><div class="k">${esc(k)}</div><div class="v">${t}</div></div>`).join('')}
+    </div>
+    <div class="flap" id="flap">
+      <div class="k">Sealed · ${esc(v.sealedLabel)} &nbsp;›&nbsp; tap to unseal</div>
+      <div class="body">${v.sealed}</div>
+    </div>
+  `;
+  document.getElementById('scrim').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  d.querySelector('.close').onclick = closeDossier;
+  const flap = document.getElementById('flap');
+  flap.onclick = () => {
+    flap.classList.add('open');
+    flap.querySelector('.k').textContent = 'Unsealed · ' + v.sealedLabel;
+    if(!PROGRESS.dossiers.includes(v.id)){ PROGRESS.dossiers.push(v.id); saveProgress(); paintProgress(); }
+  };
+}
+function closeDossier(){
+  document.getElementById('scrim').classList.remove('on');
+  document.body.style.overflow = '';
+  RENDER.gallery();
+}
+document.getElementById('scrim').onclick = e => { if(e.target.id === 'scrim') closeDossier(); };
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && document.getElementById('scrim').classList.contains('on')) closeDossier(); });
+
+/* ============================ VIEW: SORT ============================ */
+let picked = null;
+RENDER.sort = function(){
+  const S = SPEC.sort;
+  const el = document.getElementById('v-sort');
+  picked = null;
+  if(!PROGRESS.sortState){
+    const order = S.items.map((_,i)=>i).sort(()=>Math.random()-0.5);
+    const place = {}; order.forEach(i => place[i] = 'pool');
+    PROGRESS.sortState = { order, place };
+    saveProgress();
+  }
+  const st = PROGRESS.sortState;
+  const chipHtml = i => `<div class="chip" draggable="true" data-i="${i}">${esc(S.items[i].name)}</div>`;
+  const zoneHtml = z => st.order.filter(i => st.place[i] === z).map(chipHtml).join('');
+  el.innerHTML = `
+    <span class="eyebrow">Part three</span>
+    <h2>${esc(S.head)}</h2>
+    <p class="sub">${S.sub}</p>
+    <div class="dnd-pool" id="pool">${zoneHtml('pool')}</div>
+    <div class="bins">
+      ${S.bins.map(b => `<div class="bin" data-bin="${b.key}"><h5>${esc(b.label)}</h5><div class="bsub">${esc(b.sub||'')}</div><div class="drop">${zoneHtml(b.key)}</div></div>`).join('')}
+    </div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="checkSort">Check it</button>
+      <button class="btn ghost" id="resetSort">Start over</button>
+    </div>
+    <div class="feedback" id="sortFb"></div>
+    <div style="margin-top:26px"><button class="btn ghost" id="toField">${esc(S.cta)}</button></div>
+  `;
+
+  const pool = el.querySelector('#pool');
+  const chips = () => el.querySelectorAll('.chip');
+  const zones = [pool, ...el.querySelectorAll('.bin .drop')];
+
+  function wire(){
+    chips().forEach(c => {
+      c.ondragstart = e => { e.dataTransfer.setData('text/plain', c.dataset.i); e.dataTransfer.effectAllowed='move'; };
+      c.onclick = () => {
+        if(picked === c){ c.classList.remove('picked'); picked = null; return; }
+        chips().forEach(x=>x.classList.remove('picked'));
+        c.classList.add('picked'); picked = c;
+      };
+    });
+  }
+  function drop(target, i){
+    const chip = el.querySelector(`.chip[data-i="${i}"]`);
+    if(!chip) return;
+    target.appendChild(chip);
+    chip.classList.remove('picked','right','wrong');
+    picked = null;
+    const bin = target.closest('.bin');
+    st.place[i] = bin ? bin.dataset.bin : 'pool';
+    st.order = [...el.querySelectorAll('.chip')].map(c => +c.dataset.i);
+    saveProgress();
+  }
+  zones.forEach(z => {
+    const host = z.classList.contains('drop') ? z.parentElement : z;
+    z.ondragover = e => { e.preventDefault(); host.classList.add('over'); };
+    z.ondragleave = () => host.classList.remove('over');
+    z.ondrop = e => { e.preventDefault(); host.classList.remove('over'); drop(z, e.dataTransfer.getData('text/plain')); };
+    z.onclick = e => { if(picked && !e.target.classList.contains('chip')) drop(z, picked.dataset.i); };
+  });
+  el.querySelectorAll('.bin').forEach(b => b.onclick = e => {
+    if(picked && !e.target.classList.contains('chip')) drop(b.querySelector('.drop'), picked.dataset.i);
+  });
+
+  el.querySelector('#checkSort').onclick = () => {
+    let right = 0, misses = [];
+    const unplaced = pool.querySelectorAll('.chip').length;
+    el.querySelectorAll('.bin').forEach(bin => {
+      bin.querySelectorAll('.chip').forEach(c => {
+        const it = S.items[+c.dataset.i];
+        const ok = it.bin === bin.dataset.bin;
+        c.classList.toggle('right', ok); c.classList.toggle('wrong', !ok);
+        if(ok) right++; else misses.push(it);
+      });
+    });
+    const total = S.items.length;
+    const fb = el.querySelector('#sortFb');
+    fb.className = 'feedback on ' + (right===total ? 'good' : 'bad');
+    fb.innerHTML = right===total
+      ? `<b style="font-family:var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--green)">${total} for ${total}</b><br>${S.win}`
+      : `<b style="font-family:var(--display);letter-spacing:.1em;text-transform:uppercase">${right} of ${total} placed correctly${unplaced?`, ${unplaced} still in the pool`:''}</b>
+         <div style="margin-top:10px">${misses.map(m => `<div style="margin-bottom:6px"><b>${esc(m.name)}</b> · ${m.why}</div>`).join('')}</div>`;
+    if(PROGRESS.sortBest == null || right > PROGRESS.sortBest){ PROGRESS.sortBest = right; saveProgress(); }
+    paintProgress();
+  };
+  el.querySelector('#resetSort').onclick = () => {
+    el.querySelectorAll('.bin .chip').forEach(c => {
+      c.classList.remove('right','wrong','picked');
+      pool.appendChild(c);
+      st.place[+c.dataset.i] = 'pool';
+    });
+    saveProgress();
+    el.querySelector('#sortFb').className = 'feedback';
+  };
+  wire();
+};
+
+/* ============================ VIEW: FIELD TEST ============================ */
+let activeScen = null, scenNode = null, scenTrail = [];
+RENDER.field = function(){
+  const F = SPEC.field;
+  const el = document.getElementById('v-field');
+  if(!activeScen && PROGRESS.scenState){
+    const s = F.scenarios.find(x => x.id === PROGRESS.scenState.id);
+    if(s && s.nodes[PROGRESS.scenState.node]){
+      activeScen = s; scenNode = PROGRESS.scenState.node; scenTrail = (PROGRESS.scenState.trail || []).slice();
+    } else { PROGRESS.scenState = null; }
+  }
+  if(activeScen) return paintScen();
+  el.innerHTML = `
+    <span class="eyebrow">Part four</span>
+    <h2>${esc(F.head)}</h2>
+    <p class="sub">${F.sub}</p>
+    <div class="scen-pick">
+      ${F.scenarios.map(s => {
+        const rec = PROGRESS.scenarios.find(x => x.id === s.id);
+        return `<div class="card ${rec?'read':''}" data-scen="${s.id}">
+          <div class="no">${esc(s.line)}</div>
+          <div class="nm">${esc(s.title)}</div>
+          <div class="teaser">${s.setup}</div>
+          <span class="more">${rec ? (rec.win?'Held the standard · run again':'Ended short · run again') : 'Run the scenario'}</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="margin-top:26px"><button class="btn" id="toQuiz">Take the assessment</button></div>
+  `;
+  el.querySelectorAll('[data-scen]').forEach(c => c.onclick = () => {
+    activeScen = F.scenarios.find(s => s.id === c.dataset.scen);
+    scenNode = activeScen.start; scenTrail = [];
+    paintScen();
+  });
+  el.querySelector('#toQuiz').onclick = () => go('quiz');
+};
+function paintScen(){
+  const el = document.getElementById('v-field');
+  const s = activeScen, n = s.nodes[scenNode];
+  if(n.end){
+    const rec = PROGRESS.scenarios.find(x => x.id === s.id);
+    if(rec){ rec.win = rec.win || n.win; } else { PROGRESS.scenarios.push({id:s.id, win:n.win}); }
+    PROGRESS.scenState = null;
+    saveProgress(); paintProgress();
+  } else {
+    PROGRESS.scenState = { id:s.id, node:scenNode, trail:scenTrail.slice() };
+    saveProgress();
+  }
+  el.innerHTML = `
+    <button class="btn ghost" id="backScen" style="margin-bottom:18px">← All scenarios</button>
+    <span class="eyebrow">${esc(s.line)}</span>
+    <h2>${esc(s.title)}</h2>
+    <p class="sub">${s.setup}</p>
+    ${n.end ? `
+      <div class="outcome ${n.win?'win':(n.verdict==='Partial'?'':'loss')}">
+        <div class="verdict">${esc(n.verdict)}</div>
+        <p style="margin:0 0 14px">${n.text}</p>
+        <div style="border-top:1px solid var(--line);padding-top:12px">
+          <div class="hint" style="margin-bottom:6px">Why it played out that way</div>
+          <p style="margin:0">${n.why}</p>
+        </div>
+        <div class="trail">Your line: ${scenTrail.join(' → ')}</div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="againScen">Run it again</button>
+        <button class="btn ghost" id="backScen2">Pick another scenario</button>
+      </div>`
+    : `
+      <div class="node">
+        <div class="stage">Decision ${scenTrail.length + 1}</div>
+        <p class="text">${n.text}</p>
+        <div class="choices">
+          ${n.choices.map((c,i) => `<button class="choice" data-to="${c.to}" data-i="${i}">${c.t}</button>`).join('')}
+        </div>
+      </div>
+      ${scenTrail.length ? `<div class="trail">Your line so far: ${scenTrail.join(' → ')}</div>` : ''}`}
+  `;
+  const back = () => { activeScen = null; PROGRESS.scenState = null; saveProgress(); RENDER.field(); };
+  el.querySelector('#backScen').onclick = back;
+  if(el.querySelector('#backScen2')) el.querySelector('#backScen2').onclick = back;
+  if(el.querySelector('#againScen')) el.querySelector('#againScen').onclick = () => { scenNode = s.start; scenTrail = []; paintScen(); };
+  el.querySelectorAll('.choice').forEach(b => b.onclick = () => {
+    scenTrail.push('option ' + 'ABCD'[+b.dataset.i]);
+    scenNode = b.dataset.to;
+    paintScen();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
+
+/* ============================ VIEW: QUIZ ============================ */
+const QUIZ = SPEC.quiz.items;
+const PASS = SPEC.quiz.pass;
+let qi = 0, answers = [], quizOrder = [], quizLive = false;
+RENDER.quiz = function(){
+  const el = document.getElementById('v-quiz');
+  if(!quizLive) return paintQuizIntro(el);
+  paintQuestion(el);
+};
+function paintQuizIntro(el){
+  const prior = ATTEMPTS.filter(a => a.name === (PROFILE.name || 'Unnamed'));
+  const open = PROGRESS.quizState;
+  el.innerHTML = `
+    <span class="eyebrow">Part five</span>
+    <h2>Assessment</h2>
+    <p class="sub">${QUIZ.length} questions. You answer, it tells you immediately whether you got it, and it explains both the right answer and the one you picked. No going back to change it, which is the point. Pass mark is ${PASS} of ${QUIZ.length}. If you close the module partway through, the attempt waits for you.</p>
+    ${open ? `<div class="resumebar">
+      <div style="flex:1;min-width:220px">
+        <b style="font-family:var(--display);text-transform:uppercase;letter-spacing:.1em;font-size:13px;color:var(--prism);display:block;margin-bottom:4px">Attempt in progress</b>
+        Question ${open.qi + 1} of ${QUIZ.length}, ${open.answers.filter(a=>a.ok).length} correct so far. Started ${ago(PROGRESS.updatedAt)}.
+      </div>
+      <button class="btn" id="resumeQ">Pick up at question ${open.qi + 1}</button>
+      <button class="btn ghost" id="dropQ">Scrap it, start fresh</button>
+    </div>` : ''}
+    <div class="panel">
+      <div class="hint" style="margin-bottom:8px">Recording as</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input type="text" id="qName" placeholder="Your name or employee ID" value="${esc(PROFILE.name)}" style="flex:1">
+        <button class="btn" id="startQuiz">Begin</button>
+      </div>
+      <label class="check" style="margin-top:14px">
+        <input type="checkbox" id="qShare" ${PROFILE.share?'checked':''}> Add this result to the shared cohort roster
+      </label>
+      <p class="note" style="margin:8px 0 0">This is practice, not the gate. The gate is the written assessment the Training Lead issues and marks under ${SPEC.certRef}.</p>
+      ${prior.length ? `<p class="note" style="margin:14px 0 0;border-top:1px solid var(--line);padding-top:12px">Previous attempts under this name: ${prior.length}. Best so far: ${Math.max(...prior.map(a=>a.score))}/${QUIZ.length}.</p>` : ''}
+    </div>
+  `;
+  if(el.querySelector('#resumeQ')){
+    el.querySelector('#resumeQ').onclick = () => resumeQuiz();
+    el.querySelector('#dropQ').onclick = () => { PROGRESS.quizState = null; saveProgress(); RENDER.quiz(); };
+  }
+  el.querySelector('#startQuiz').onclick = () => {
+    PROFILE.name = el.querySelector('#qName').value.trim();
+    PROFILE.share = el.querySelector('#qShare').checked;
+    saveProfile();
+    qi = 0; answers = []; quizLive = true;
+    quizOrder = QUIZ.map((q,i)=>i).sort(()=>Math.random()-0.5);
+    PROGRESS.quizState = { order:quizOrder, qi:0, answers:[], name:PROFILE.name };
+    saveProgress();
+    RENDER.quiz();
+  };
+}
+function paintQuestion(el){
+  const q = QUIZ[quizOrder[qi]];
+  const order = q.opts.map((o,i)=>i).sort(()=>Math.random()-0.5);
+  el.innerHTML = `
+    <div class="qhead">
+      <span class="n">Question ${qi+1} of ${QUIZ.length}</span>
+      <span class="n">${answers.filter(a=>a.ok).length} correct so far</span>
+    </div>
+    <p class="qtext">${q.q}</p>
+    <div class="opts">
+      ${order.map((oi,pos) => `<button class="opt" data-oi="${oi}"><span class="ltr">${'ABCD'[pos]}</span><span>${q.opts[oi].t}</span></button>`).join('')}
+    </div>
+    <div class="rationale" id="rat"></div>
+    <div id="nextWrap" style="margin-top:18px;display:none">
+      <button class="btn" id="nextQ">${qi === QUIZ.length-1 ? 'See your score' : 'Next question'}</button>
+    </div>
+  `;
+  el.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+    const oi = +b.dataset.oi, chosen = q.opts[oi], ok = !!chosen.ok;
+    const correct = q.opts.findIndex(o => o.ok);
+    el.querySelectorAll('.opt').forEach(x => {
+      x.disabled = true;
+      if(+x.dataset.oi === correct) x.classList.add('correct');
+      if(+x.dataset.oi === oi && !ok) x.classList.add('chosen-wrong');
+    });
+    const rat = el.querySelector('#rat');
+    rat.className = 'rationale on ' + (ok ? 'right' : 'wrong');
+    rat.innerHTML = ok
+      ? `<div class="tag">Correct</div><div class="why">${q.opts[correct].why}</div>`
+      : `<div class="tag">Not quite</div>
+         <div class="why"><b>You picked:</b> ${chosen.t}<br>${chosen.why}</div>
+         <div class="miss"><b>The answer is:</b> ${q.opts[correct].t}<br>${q.opts[correct].why}</div>`;
+    answers.push({ qi:quizOrder[qi], ok, chosen:oi });
+    PROGRESS.quizState = { order:quizOrder, qi:answers.length, answers:answers.slice(), name:PROFILE.name };
+    saveProgress();
+    el.querySelector('#nextWrap').style.display = 'block';
+    el.querySelector('#nextQ').onclick = () => {
+      qi++;
+      if(qi >= QUIZ.length) finishQuiz(el); else paintQuestion(el);
+      window.scrollTo({top:0, behavior:'smooth'});
+    };
+  });
+}
+function resumeQuiz(){
+  const st = PROGRESS.quizState;
+  if(!st) return;
+  quizOrder = st.order; answers = st.answers.slice(); qi = st.qi; quizLive = true;
+  if(st.name && !PROFILE.name){ PROFILE.name = st.name; saveProfile(); }
+  const el = document.getElementById('v-quiz');
+  if(qi >= QUIZ.length) finishQuiz(el); else paintQuestion(el);
+}
+async function finishQuiz(el){
+  quizLive = false;
+  PROGRESS.quizState = null;
+  const score = answers.filter(a=>a.ok).length;
+  const pct = Math.round(score/QUIZ.length*100);
+  const attempt = {
+    id: 'a' + Date.now() + Math.floor(Math.random()*999),
+    name: PROFILE.name || 'Unnamed',
+    when: new Date().toISOString(),
+    score, total: QUIZ.length, pct,
+    detail: answers.map(a => ({ q:a.qi, ok:a.ok, chosen:a.chosen }))
+  };
+  ATTEMPTS.push(attempt);
+  PROGRESS.quizTaken = true;
+  await saveAttempts(); await saveProgress();
+  if(PROFILE.share){
+    const roster = (await store.get(NS+'roster', true)) || [];
+    roster.push({ name:attempt.name, when:attempt.when, score, total:QUIZ.length, pct });
+    await store.set(NS+'roster', roster.slice(-300), true);
+  }
+  const pass = score >= PASS;
+  const missed = answers.filter(a => !a.ok).map(a => QUIZ[a.qi].q);
+  el.innerHTML = `
+    <div class="scorewrap">
+      <div class="hint">Attempt ${ATTEMPTS.filter(a=>a.name===attempt.name).length} · ${esc(attempt.name)}</div>
+      <div class="bigscore">${score}<span style="color:var(--muted);font-size:.5em">/${QUIZ.length}</span></div>
+      <div class="stamp ${pass?'':'fail'}">${pass ? 'At standard' : 'Review needed'}</div>
+      <p class="sub" style="margin:10px auto 0">${pass ? SPEC.quiz.passMsg : SPEC.quiz.failMsg}</p>
+    </div>
+    ${missed.length ? `<div class="panel"><div class="hint" style="margin-bottom:10px">What you missed</div>
+      ${missed.map(m => `<div style="border-top:1px solid var(--line);padding:10px 0;font-size:15px">${m}</div>`).join('')}</div>` : ''}
+    <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="retake">Take it again</button>
+      <button class="btn ghost" id="toRecords">See the record log</button>
+      <button class="btn ghost" id="toGal">Back to the cards</button>
+    </div>
+  `;
+  el.querySelector('#retake').onclick = () => { qi=0; answers=[]; quizLive=false; RENDER.quiz(); };
+  el.querySelector('#toRecords').onclick = () => go('records');
+  el.querySelector('#toGal').onclick = () => go('gallery');
+  paintProgress();
+}
+
+/* ============================ VIEW: RECORDS ============================ */
+RENDER.records = function(){
+  const el = document.getElementById('v-records');
+  const mine = ATTEMPTS.slice().sort((a,b) => new Date(b.when) - new Date(a.when));
+  const best = mine.length ? Math.max(...mine.map(a=>a.score)) : 0;
+  const avg  = mine.length ? (mine.reduce((s,a)=>s+a.score,0)/mine.length).toFixed(1) : '0';
+  const first = mine.length ? mine[mine.length-1].score : 0;
+
+  const acc = QUIZ.map((q,i) => {
+    const tries = ATTEMPTS.flatMap(a => a.detail.filter(d => d.q === i));
+    const right = tries.filter(d => d.ok).length;
+    return { i, q:q.q, tries:tries.length, pct: tries.length ? Math.round(right/tries.length*100) : null };
+  }).filter(x => x.tries > 0).sort((a,b) => a.pct - b.pct);
+
+  el.innerHTML = `
+    <span class="eyebrow">Part six</span>
+    <h2>Records</h2>
+    <p class="sub">Every attempt logged on this device, plus which questions keep tripping people up. A criterion failing across several operators is a curriculum finding under ${SPEC.qaRef}, not a coaching matter, so this page is worth showing the Training Lead.</p>
+    <div class="panel" style="margin-bottom:24px">
+      <div class="hint" style="margin-bottom:8px">Session state</div>
+      <div style="font-size:15px">Last saved ${PROGRESS.updatedAt ? ago(PROGRESS.updatedAt) + ' (' + new Date(PROGRESS.updatedAt).toLocaleString() + ')' : 'never'}.
+      ${PROGRESS.lastTab ? 'Last section open: ' + esc(tabLabel(PROGRESS.lastTab)) + '.' : ''}
+      ${PROGRESS.quizState ? '<b>An assessment is paused at question ' + (PROGRESS.quizState.qi + 1) + '.</b>' : ''}
+      ${PROGRESS.scenState ? 'A scenario is paused mid-branch.' : ''}</div>
+    </div>
+
+    ${mine.length ? `
+    <div class="statgrid">
+      <div class="stat"><div class="k">Attempts</div><div class="v">${mine.length}</div></div>
+      <div class="stat"><div class="k">Best score</div><div class="v">${best}<span style="font-size:.5em;color:var(--muted)">/${QUIZ.length}</span></div></div>
+      <div class="stat"><div class="k">Average</div><div class="v">${avg}</div></div>
+      <div class="stat"><div class="k">First to latest</div><div class="v">${first} → ${mine[0].score}</div></div>
+    </div>
+
+    <h3>Weakest questions first</h3>
+    <div class="qbars">
+      ${acc.slice(0,6).map(a => `
+        <div class="qbar">
+          <div class="track"><i style="width:${a.pct}%;background:${a.pct<50?'var(--crimson)':a.pct<80?'var(--amber)':'var(--green)'}"></i>
+            <span>${esc(a.q.length > 62 ? a.q.slice(0,62)+'…' : a.q)}</span></div>
+          <div class="pct">${a.pct}% · ${a.tries}x</div>
+        </div>`).join('')}
+    </div>
+
+    <h3>Attempt log</h3>
+    <div style="overflow-x:auto">
+      <table class="rec">
+        <thead><tr><th>#</th><th>Name</th><th>Date</th><th>Score</th><th>%</th><th>Missed</th></tr></thead>
+        <tbody>
+          ${mine.map((a,idx) => `<tr>
+            <td>${mine.length-idx}</td>
+            <td>${esc(a.name)}</td>
+            <td style="white-space:nowrap">${new Date(a.when).toLocaleString()}</td>
+            <td>${a.score}/${a.total}</td>
+            <td>${a.pct}%</td>
+            <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${a.detail.filter(d=>!d.ok).map(d=>'Q'+(d.q+1)).join(' ') || 'none'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>` : `<div class="panel"><b style="font-family:var(--display);letter-spacing:.1em;text-transform:uppercase">Nothing logged yet</b>
+      <p style="margin:10px 0 16px">Take the assessment and every attempt lands here with the date, score, and which questions went wrong.</p>
+      <button class="btn" id="goQuizEmpty">Go to the assessment</button></div>`}
+
+    <h3>Activity outside the assessment</h3>
+    <table class="rec">
+      <tbody>
+        <tr><td>Cards unsealed</td><td>${PROGRESS.dossiers.length} of ${GAL_TOTAL}</td></tr>
+        <tr><td>Best sort</td><td>${PROGRESS.sortBest == null ? 'not attempted' : PROGRESS.sortBest + ' of ' + SPEC.sort.items.length}</td></tr>
+        <tr><td>Scenarios run</td><td>${PROGRESS.scenarios.length} of ${SPEC.field.scenarios.length}${PROGRESS.scenarios.length ? ' · standard held in ' + PROGRESS.scenarios.filter(s=>s.win).length : ''}</td></tr>
+        <tr><td>Ledger rows revealed</td><td>${PROGRESS.revealed.length} of ${SPEC.ledger.rows.length}</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Export and roster</h3>
+    <div class="toolbar">
+      <button class="btn" id="csvBtn" ${mine.length?'':'disabled'}>Show CSV</button>
+      <button class="btn ghost" id="dlBtn" ${mine.length?'':'disabled'}>Download CSV</button>
+      <button class="btn ghost" id="rosterBtn">Load cohort roster</button>
+      <button class="btn ghost danger" id="clearBtn" ${mine.length?'':'disabled'}>Clear my records</button>
+    </div>
+    <textarea class="csv" id="csvOut" readonly></textarea>
+    <div id="rosterOut"></div>
+    <p class="note" style="margin-top:18px">Records are stored per person on this device. The cohort roster is a shared list, so anything you send there is readable by everyone else using this module.</p>
+
+    <h3>Move progress to another machine</h3>
+    <p class="note" style="margin-bottom:14px">This copies your whole state, scores, cards, sort, scenarios, and any paused attempt, into a block of text. Paste it into the same box on another device to land exactly where you left off.</p>
+    <div class="toolbar">
+      <button class="btn ghost" id="expBtn">Copy my progress</button>
+      <button class="btn ghost" id="impBtn">Paste progress in</button>
+    </div>
+    <textarea class="csv" id="stateBox" placeholder="Paste a progress block here, then press Restore."></textarea>
+    <div id="impActions" style="margin-top:10px;display:none"><button class="btn" id="doImp">Restore this progress</button></div>
+    <div id="impStatus" class="feedback"></div>
+  `;
+
+  if(el.querySelector('#goQuizEmpty')) el.querySelector('#goQuizEmpty').onclick = () => go('quiz');
+
+  const csv = () => {
+    const head = ['attempt','name','timestamp','score','total','percent', ...QUIZ.map((q,i)=>'Q'+(i+1))];
+    const rows = ATTEMPTS.map((a,i) => {
+      const per = QUIZ.map((q,qi2) => { const d = a.detail.find(x=>x.q===qi2); return d ? (d.ok?1:0) : ''; });
+      return [i+1, `"${String(a.name).replace(/"/g,'""')}"`, a.when, a.score, a.total, a.pct, ...per];
+    });
+    return [head.join(','), ...rows.map(r=>r.join(','))].join('\n');
+  };
+  const out = el.querySelector('#csvOut');
+  if(el.querySelector('#csvBtn')) el.querySelector('#csvBtn').onclick = () => {
+    out.value = csv(); out.classList.add('on'); out.focus(); out.select();
+  };
+  if(el.querySelector('#dlBtn')) el.querySelector('#dlBtn').onclick = () => {
+    try{
+      const blob = new Blob([csv()], {type:'text/csv'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = SPEC.code.toLowerCase() + '-results.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+    }catch(e){ out.value = csv(); out.classList.add('on'); }
+  };
+  el.querySelector('#rosterBtn').onclick = async () => {
+    const roster = (await store.get(NS+'roster', true)) || [];
+    const box = el.querySelector('#rosterOut');
+    if(!roster.length){ box.innerHTML = `<p class="note">Roster is empty. Results only land here when someone turns on sharing before taking the assessment.</p>`; return; }
+    const sorted = roster.slice().sort((a,b) => b.score - a.score || new Date(a.when) - new Date(b.when));
+    box.innerHTML = `<h3>Cohort roster · ${roster.length} entries</h3><div style="overflow-x:auto"><table class="rec">
+      <thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>%</th><th>Date</th></tr></thead>
+      <tbody>${sorted.map((r,i) => `<tr><td>${i+1}</td><td>${esc(r.name)}</td><td>${r.score}/${r.total}</td><td>${r.pct}%</td><td style="white-space:nowrap">${new Date(r.when).toLocaleDateString()}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+  };
+  if(el.querySelector('#clearBtn')) el.querySelector('#clearBtn').onclick = async function(){
+    if(this.dataset.armed !== '1'){ this.dataset.armed = '1'; this.textContent = 'Tap again to erase everything'; return; }
+    ATTEMPTS = [];
+    PROGRESS = { visited:['records'], dossiers:[], sortBest:null, scenarios:[], quizTaken:false,
+      lastTab:'records', revealed:[], sortState:null, scenState:null, quizState:null, updatedAt:null };
+    await saveAttempts(); await saveProgress();
+    RENDER.records(); paintProgress();
+  };
+
+  const box = el.querySelector('#stateBox');
+  el.querySelector('#expBtn').onclick = () => {
+    box.value = btoa(unescape(encodeURIComponent(JSON.stringify({ v:1, m:SPEC.id, profile:PROFILE, progress:PROGRESS, attempts:ATTEMPTS }))));
+    box.classList.add('on'); box.readOnly = true; box.focus(); box.select();
+    el.querySelector('#impActions').style.display = 'none';
+    toast('expBtn','Selected, now copy it');
+  };
+  el.querySelector('#impBtn').onclick = () => {
+    box.value = ''; box.readOnly = false; box.classList.add('on'); box.focus();
+    el.querySelector('#impActions').style.display = 'block';
+  };
+  el.querySelector('#doImp').onclick = async () => {
+    const st = document.getElementById('impStatus');
+    try{
+      const data = JSON.parse(decodeURIComponent(escape(atob(box.value.trim()))));
+      if(!data.progress) throw new Error('bad block');
+      if(data.m && data.m !== SPEC.id){
+        st.className = 'feedback on bad';
+        st.textContent = 'That block is from a different module (' + data.m.toUpperCase() + '). Paste it into that one instead.';
+        return;
+      }
+      PROFILE = Object.assign(PROFILE, data.profile || {});
+      PROGRESS = Object.assign(PROGRESS, data.progress);
+      if(Array.isArray(data.attempts)) ATTEMPTS = data.attempts;
+      await saveProfile(); await saveAttempts(); await saveProgress();
+      box.classList.remove('on'); el.querySelector('#impActions').style.display = 'none';
+      ['v-brief'].forEach(id => { const v = document.getElementById(id); if(v) delete v.dataset.built; });
+      activeScen = null; quizLive = false;
+      RENDER.records(); paintProgress();
+      const st2 = document.getElementById('impStatus');
+      st2.className = 'feedback on good';
+      st2.textContent = 'Restored. Sections, scores, and any paused attempt are back where they were.';
+    }catch(e){
+      st.className = 'feedback on bad';
+      st.textContent = "That block didn't read as progress data. Copy the whole thing, including the very end.";
+    }
+  };
+};
+
+/* ============================ BOOT ============================ */
+(async function(){
+  await loadAll();
+  buildHead();
+  buildTabs();
+  const returning = !!(PROGRESS.lastTab && PROGRESS.updatedAt);
+  go(returning ? PROGRESS.lastTab : 'brief');
+  if(returning) showResume();
+  setInterval(paintSaved, 60000);
+})();
+</script>
